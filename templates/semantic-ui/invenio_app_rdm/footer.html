@@ -1,0 +1,90 @@
+{#
+
+Copyright (C) 2019-2020 CERN.
+Copyright (C) 2019-2020 Northwestern University.
+Copyright (C) 2021 Graz University of Technology.
+
+Invenio App RDM is free software; you can redistribute it and/or modify it
+under the terms of the MIT License; see LICENSE file for more details.
+#}
+{%- block footer_top %}
+
+<div class="footer-top">
+  <div class="ui container app-rdm-footer">
+    {%- block footer_top_left %}
+    <div class="ui grid app-rdm-footer">
+      <div class="rdm-footer five wide tablet two wide computer column"></div>
+      <div class="rdm-footer five wide tablet two wide computer float right right-bordered column">
+        <h2 class="ui bordered centered header">{{ _("Contact Us") }}</h2>
+        <div class="ui middle aligned animated divided link list">
+          <div class="item">
+            <i class="road icon"></i>
+            <div class="content">
+              3 Barack Obama Drive
+            </div>
+          </div>
+          <div class="item">
+            <i class="envelope icon"></i>
+            <div class="content">
+              P.O. Box 9653,<br> 11101 Dar es Salaam
+            </div>
+          </div>
+          <div class="item">
+            <i class="phone icon"></i>
+            <div class="content">
+              +255 22 2121400
+            </div>
+          </div>
+          <div class="item">
+            <i class="fax icon"></i>
+            <div class="content">
+              +255 22 2121360
+            </div>
+          </div>
+          <div class="item">
+            <i class="at icon"></i>
+            <div class="content">
+              <a href="mailto:hq@nimr.or.tz">hq@nimr.or.tz</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="rdm-footer five wide tablet two wide computer column">
+        <h2 class="ui bordered centered header">{{ _("Quick Links") }}</h2>
+        <div class="ui very relaxed middle aligned animated divided link list">
+          <a href="/" class="item">
+            <i class="home icon"></i>
+            <div class="content">
+              Home
+            </div>
+          </a>
+          <a href="/" class="item">
+            <i class="info icon"></i>
+            <div class="content">
+              About Us
+            </div>
+          </a>
+          <a href="/" class="item">
+            <i class="exclamation triangle icon"></i>
+            <div class="content">
+              Disclaimer
+            </div>
+          </a>
+          <a href="/" class="item">
+            <i class="shield icon"></i>
+            <div class="content">
+              Privacy Policy
+            </div>
+          </a>
+        </div>
+      </div>
+      {%- endblock footer_top_left %}
+      <div class="six wide column right aligned">
+        {%- block footer_top_right %}
+        {%- endblock footer_top_right %}
+      </div>
+    </div>
+  </div>
+
+</div>
+{%- endblock footer_top %}

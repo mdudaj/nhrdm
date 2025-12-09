@@ -1,0 +1,7 @@
+.brought-to-you-section img,
+.trusted-by-section img {
+  max-height: 250px;
+  margin: 20px;
+  padding: 20px;
+  object-fit: contain;
+}

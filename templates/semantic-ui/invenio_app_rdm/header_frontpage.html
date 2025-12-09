@@ -1,0 +1,114 @@
+{# -*- coding: utf-8 -*-
+    Copyright (C) 2020 CERN.
+    Copyright (C) 2020 Northwestern University.
+    Copyright (C) 2021 New York University.
+
+    Invenio App RDM is free software; you can redistribute it and/or modify it
+    under the terms of the MIT License; see LICENSE file for more details.
+#}
+
+{%- extends config.THEME_HEADER_TEMPLATE %}
+
+{%- block navbar %}
+
+<div class="ui container">
+  <div class="ui two column grid">
+    <div class="row">
+      <div class="column"></div>
+      <div class="column"></div>
+    </div>
+  </div>
+</div>
+
+<div class="ui grid main-logo">
+  <div class="column row">
+    <div class="two wide column">
+      <div class="logo">
+        <a class="logo-link" href="/">
+          <img class="ui fluid middle aligned image rdm-logo" 
+                src="{{ url_for('static', filename='images/coat-of-arms-of-tanzania.svg') }}" 
+                alt="{{ _('United Republic of Tanzania') }}"/>
+        </a>
+      </div>
+    </div>
+    <div class="twelve wide column"></div>
+    <div class="two wide column">
+      <div class="logo">
+        <a class="logo-link" href="/">
+          <img class="ui fluid middle aligned image rdm-logo" 
+                src="{{ url_for('static', filename='images/nimr.svg') }}" 
+                alt="{{ _('National Institute for Medical Research') }}"/>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ui container">
+  <div class="ui grid stackable container">
+    <div class="ui fluid three item secondary pointing massive menu">
+      <a class="active item" href="/">
+        <i class="home icon"></i>
+        {{ _('Home') }}
+      </a>
+      <div class="ui pointing dropdown link item">
+        <i class="wpexplorer icon"></i>
+        Explore
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          <a class="item" href="/">Browse By Type</a>
+          <div class="divider"></div>
+          <a class="item" href="/">Browse By Subjects</a>
+        </div>
+      </div>
+      {% if current_user.is_authenticated %}
+        <a class="item" href="{{ url_for('invenio_app_rdm_users.uploads') }}">
+            Dashboard
+        </a>
+      {% else %}
+        <a class="item"
+          href="{{ url_for_security('login', next=url_for('invenio_app_rdm_users.uploads')) }}">
+            Dashboard
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{%- block frontpage_search %}
+<div id="frontpage-search-bar" class="ui container fluid frontpage-header">
+  <div class="ui container grid rel-mt-2">
+    <div class="row">
+      <div class="sixteen wide column center aligned">
+        {%- block frontpage_title %}
+        <h1 class="ui center aligned header inverted bordered">
+          {{ _(config.THEME_FRONTPAGE_TITLE) }}
+        </h1>
+        <h4 class="summary">
+          Find, access, and re-use data for research - from Tanzanian
+          research organisations, and government institutions
+        </h4>
+      </div>
+    </div>
+      {%- endblock frontpage_title %}
+      {%- block frontpage_form %}
+      <div class="row">
+          <div class="sixteen wide mobile four wide computer column"></div>
+          <div class="sixteen wide mobile eight wide computer column center aligned">
+            <form action="{{ url_for('invenio_search_ui.search') }}" class="ui form" role="search">
+              <div class="ui fluid big action input">
+                <input type="text" name="q" class="form-control" aria-label="{{ _('Search') }}" placeholder="{{ _('Search') }}">
+                <button type="submit" class="ui icon search button" aria-label="{{ _('Search') }}">
+                  <i class="search icon"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="ui divider hidden"></div>
+        {%- endblock frontpage_form %}
+  </div>
+</div>
+{%- endblock frontpage_search %}
+
+{% endblock %}

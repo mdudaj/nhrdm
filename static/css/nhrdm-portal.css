@@ -1,0 +1,39 @@
+/* - Bordered elements - */
+.bordered {
+  position: relative;
+  padding-top: 8px;
+  margin-bottom: 8px;
+}
+
+.bordered::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25%;
+  height: 2px;
+  /* border-bottom: 1px solid currentColor; */
+  background: linear-gradient(to right, transparent 25%, currentColor, transparent 75%);
+
+}
+
+.right-bordered {
+  position: relative;
+  padding-right: 10px;
+  margin-right: 10px;
+}
+
+.right-bordered::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 80%;
+  /* border-right: 1px solid currentColor; */
+  background: linear-gradient(to bottom, transparent 25%, currentColor, transparent 75%);
+}
+
+  

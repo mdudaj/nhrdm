@@ -1,0 +1,341 @@
+{%- extends "invenio_theme/frontpage.html" %}
+
+{%- block css %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/plugins/slick/slick.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='js/plugins/slick/slick-theme.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/nhrdm-portal.css') }}">
+{%- endblock css %}
+
+{%- block page_header %}
+{%- include "invenio_app_rdm/header_frontpage.html" %}
+{%- endblock page_header %}
+
+{%- block page_body %}
+{%- block first_section %}
+<div class="get-started-section section-content white-bg">
+<h2 class="bordered section-title">
+    Browse by Subjects
+</h2>
+
+<div class="ui six stackable raised cards center aligned container">
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/infectious-diseases.png') }}" alt="Infectious Diseases">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search', q='+Tuberculosis +HIV +AIDS') }}" >Infectious Diseases</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/mch.png') }}" alt="Maternal and Child Health">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Maternal and Child Health</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/ncd.png') }}" alt="Non-Communicable Diseases">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Non-Communicable Diseases</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/ntd.png') }}" alt="Neglected Tropical Diseases">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Neglected Tropical Diseases</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/traditional-medicine.png') }}" alt="Traditional Medicine">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Traditional Medicine</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/public-health.png') }}" alt="Public Health">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Public Health</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/healthcare-systems.png') }}" alt="Healthcare Systems">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Healthcare Systems</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/mental-health.png') }}" alt="Mental Health">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Mental Health</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/environmental-health.png') }}" alt="Environmental Health">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Environmental Health</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/occupational-health.png') }}" alt="Occupational Health">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Occupational Health</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/genetics-molecular.png') }}" alt="Genomic Health Sciences">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned description">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Genomic Health Sciences</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui fluid card">
+      <div class="content">
+        <div class="ui medium image">
+          <img src="{{ url_for('static', filename='images/themes/social-determinants.png') }}" alt="Community Health and Social Determinants">
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned summary">
+          <div class="bordered header">
+            <div class="ui pointing label">
+              <a href="{{ url_for('invenio_search_ui.search') }}" >Community Health and Social Determinants</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
+{%- endblock first_section %}
+{%- block second_section %}
+<div class="brought-to-you-section section-content white-bg">
+  <h2 class="bordered section-title">
+    Who Contribute to the Health Research Data Repository
+  </h2>
+  <div class="ui list contributors-logos">
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/cuhas.png') }}" alt="CUHAS">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            Catholic University Of Health And Allied Sciences
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/hkmu.png') }}" alt="HKMU">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            Hubert Kairuki Memorial University
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/muhas.png') }}" alt="MUHAS">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            Muhimbili University Of Health And Allied Sciences
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/nimr.svg') }}" alt="NIMR">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            National Institute For Medical Research
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/ihi.png') }}" alt="IHI">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            Ifakara Health Institute
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/udsm.png') }}" alt="UDSM">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            University Of Dar Es Salaam
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/sua.svg') }}" alt="SUA">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            Sokoine University Of Agriculture
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/KCMUCo.png') }}" alt="KCMUCo">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            Kilimanjaro Christian Medical University College
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="item">
+      <div class="centered content">
+        <div class="ui circular image">
+          <img src="{{ url_for('static', filename='images/orgs/udom.png') }}" alt="UDOM">
+        </div>
+        <div class="bordered header">
+          <div class="ui pointing label">
+            University Of Dodoma
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- endblock second_section %}
+{%- endblock page_body %}
+
+{%- block javascript %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/plugins/slick/slick.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/contributors-carousel.js') }}"></script>
+{%- endblock javascript %}
+
