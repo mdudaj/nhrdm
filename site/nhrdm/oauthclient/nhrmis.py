@@ -5,6 +5,124 @@
 # NHRMIS OAuth Provider Plugin for InvenioRDM
 #
 
+"""
+NHRMIS OAuth Provider Integration for InvenioRDM
+================================================
+
+This module provides a fully pre-configured OAuth remote application for
+enabling Single Sign-On (SSO) between NHRMIS (National Health Research
+Management Information System) and the NHRDM InvenioRDM repository.
+
+Overview
+--------
+
+The integration follows the standard Invenio OAuthClient architecture and
+provides:
+
+- A `NHRMISOAuthSettingsHelper` class that defines OAuth endpoints,
+  authorization URLs, token URLs, handler mappings, and application metadata.
+- Automatically constructed `REMOTE_APP` and `REMOTE_REST_APP` configuration
+  objects consumed by Invenio-OAuthClient.
+- Serialization and normalization of NHRMIS user data so it can be used by
+  Invenio for account creation, linking, and authentication.
+- Complete signup, account-setup, and linking flows.
+- Support for both HTML UI handlers and REST API handlers.
+- Disconnect/unlink functionality to remove an external NHRMIS identity from
+  an Invenio account.
+
+Configuration
+-------------
+
+To enable this provider in your Invenio instance, edit your configuration
+and add:
+
+.. code-block:: python
+
+    from nhrdm.oauthclient import nhrmis
+
+    OAUTHCLIENT_REMOTE_APPS = dict(
+        nhrmis=nhrmis.REMOTE_APP,
+    )
+
+    NHRMIS_APP_CREDENTIALS = dict(
+        consumer_key="changeme",
+        consumer_secret="changeme",
+    )
+
+You may override the userinfo endpoint if needed:
+
+.. code-block:: python
+
+    NHRMIS_APP_USERINFO_URL = "https://nhrmis.nimr.or.tz/api/user"
+
+
+Key Functional Components
+-------------------------
+
+1. **Settings Helper (`NHRMISOAuthSettingsHelper`)**
+   - Declares OAuth endpoints:
+     - Authorization URL: `https://nhrmis.nimr.or.tz/oauth/authorize`
+     - Token URL:        `https://nhrmis.nimr.or.tz/oauth/token`
+   - Defines handler mappings for:
+     - Authorization callback
+     - Disconnect operations
+     - Signup flow (info → serialize → setup)
+   - Exposes:
+     - `REMOTE_APP`
+     - `REMOTE_REST_APP`
+     used by InvenioRDM to register this provider.
+
+2. **Account Information Retrieval**
+   - User info is fetched from NHRMIS via:
+     `/api/user`
+   - Data is normalized into the structure expected by Invenio:
+     - Email
+     - Full name
+     - Institution (affiliation)
+     - External unique identifier
+   - The `account_info_serializer` ensures consistent representation.
+
+3. **Account Setup & Linking**
+   - After successful OAuth authorization:
+     - User metadata is stored in `RemoteAccount.extra_data`
+     - The NHRMIS external ID is linked to the Invenio user
+       using `oauth_link_external_id`.
+
+4. **Disconnect / Unlink**
+   - Users may unlink their NHRMIS identity.
+   - Implements the standard Invenio unlink flow:
+     - Remove external identifier
+     - Remove any associated `RemoteAccount` rows
+
+5. **HTML and REST Support**
+   - Both interface types are supported:
+     - `/oauth/login/nhrmis/`
+     - `/oauth/authorized/nhrmis/`
+     - REST endpoints for programmatic sign-in.
+
+Usage
+-----
+
+Once configured:
+
+- The login endpoint becomes:
+  `/oauth/login/nhrmis/`
+
+- Users will be redirected to NHRMIS for authentication and returned to the
+  Invenio callback where:
+  - User data is fetched
+  - The account is created or matched
+  - External identity is linked
+
+- The provider will appear under:
+  `/account/settings/linkedaccounts/`
+
+This module provides a complete NHRMIS → InvenioRDM SSO bridge, following
+Invenio best practices for external authentication, user provisioning,
+and identity linking.
+"""
+
+
 import requests
 from flask import current_app, redirect, url_for
 from flask_login import current_user
