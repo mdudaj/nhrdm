@@ -125,7 +125,9 @@ and identity linking.
 
 import requests
 from flask import current_app, redirect, url_for
-from flask_login import current_user
+from flask_login import current_user, login_user
+from invenio_accounts.models import User
+from invenio_accounts.proxies import current_datastore
 from invenio_db import db
 from invenio_i18n import lazy_gettext as _
 from invenio_oauthclient import current_oauthclient
@@ -141,6 +143,7 @@ from invenio_oauthclient.handlers.utils import (
 )
 from invenio_oauthclient.models import RemoteAccount
 from invenio_oauthclient.oauth import oauth_link_external_id, oauth_unlink_external_id
+from nhrdm.oauthclient.utils import generate_unique_username, slugify_name
 
 #
 # --- SETTINGS HELPER -------------------------------------------------------
@@ -179,8 +182,8 @@ class NHRMISOAuthSettingsHelper(OAuthSettingsHelper):
         # Handlers (HTML UI)
         #
         self._handlers = dict(
-            # authorized_handler="nhrdm.oauthclient.nhrmis:authorized",
-            authorized_handler="invenio_oauthclient.handlers:authorized_signup_handler",
+            authorized_handler="nhrdm.oauthclient.nhrmis:authorized_auto_login_create",
+            # authorized_handler="invenio_oauthclient.handlers:authorized_signup_handler",
             disconnect_handler="nhrdm.oauthclient.nhrmis:disconnect_handler",
             signup_handler=dict(
                 info="nhrdm.oauthclient.nhrmis:account_info",
@@ -194,9 +197,9 @@ class NHRMISOAuthSettingsHelper(OAuthSettingsHelper):
         # REST handlers
         #
         self._rest_handlers = dict(
-            # authorized_handler="nhrdm.oauthclient.nhrmis:authorized_rest",
-            authorized_handler="invenio_oauthclient.handlers.rest"
-            ":authorized_signup_handler",
+            authorized_handler="nhrdm.oauthclient.nhrmis:authorized_auto_login_create",
+            # authorized_handler="invenio_oauthclient.handlers.rest"
+            # ":authorized_signup_handler",
             disconnect_handler="nhrdm.oauthclient.nhrmis:disconnect_rest_handler",
             signup_handler=dict(
                 info="nhrdm.oauthclient.nhrmis:account_info",
@@ -259,13 +262,38 @@ def account_info_serializer(remote, resp, user_info, **kwargs):
             }
         }
     """
+    # Build full name
     full_name = (
         f"{user_info.get('first_name','')} {user_info.get('last_name','')}".strip()
     )
 
+    # ------------------------------------------------------------
+    # 1) Build a base username from full name or email prefix
+    # ------------------------------------------------------------
+    if full_name:
+        base_username = slugify_name(full_name)
+    else:
+        # fallback: email prefix
+        email = user_info.get("email", "")
+        base_username = slugify_name(email.split("@")[0] if email else "user")
+
+    # ------------------------------------------------------------
+    # 2) Fetch existing usernames so the utility can ensure uniqueness
+    # ------------------------------------------------------------
+    existing_usernames = {u.username for u in db.session.query(User.username).all()}
+
+    # ------------------------------------------------------------
+    # 3) Generate a unique, regex-compliant InvenioRDM username
+    # ------------------------------------------------------------
+    username = generate_unique_username(base_username, existing_usernames)
+
+    # ------------------------------------------------------------
+    # 4) Return standard structure
+    # ------------------------------------------------------------
     return dict(
         user=dict(
             email=user_info.get("email"),
+            username=username,
             profile=dict(
                 full_name=full_name,
                 affiliations=user_info.get("institution"),
@@ -404,3 +432,64 @@ def authorized_rest(resp, remote):
     REST callback handler.
     """
     return authorized_signup_rest_handler(resp, remote)
+
+
+@oauth_error_handler
+def authorized_auto_login_create(resp, remote):
+    """
+    HTML callback handler with auto-login or auto-create user from NHRMIS.
+
+    1. Fetches user info from NHRMIS.
+    2. Checks if a user exists by external ID or email.
+    3. If not, creates the user.
+    4. Logs in the user and redirects to dashboard.
+
+    : param resp: The OAuth response.
+    : param remote: The remote app.
+    """
+    # 1. Fetch user info (serialized)
+    user_data = account_info(remote, resp)  # calls account_info -> serializer
+
+    email = user_data["user"]["email"]
+    username = user_data["user"]["username"]
+    full_name = user_data["user"]["profile"]["full_name"]
+    affiliations = user_data["user"]["profile"]["affiliations"]
+    external_id = user_data["external_id"]
+
+    # 2. Check for existing user by external ID
+    user = (
+        db.session.query(User)
+        .filter(User.external_identifiers.any(id=external_id, method=remote.name))
+        .one_or_none()
+    )
+
+    # 3. If not found, check by email
+    if not user and email:
+        user = current_datastore.find_user(email=email)
+
+    # 4. If still not found, create the user
+    if not user:
+        user = User(
+            username=username,
+            email=email,
+            active=True,
+            user_profile={
+                "full_name": full_name,
+                "affiliations": affiliations,
+            },
+        )
+        db.session.add(user)
+        db.session.flush()  # to get user.id
+
+    # 5. Link external ID
+    oauth_link_external_id(
+        user,
+        dict(id=external_id, method=remote.name),
+    )
+
+    db.session.commit()
+
+    # 6. Log in the user
+    login_user(user)
+
+    return redirect(url_for("invenio_app_rdm_users.uploads"))
